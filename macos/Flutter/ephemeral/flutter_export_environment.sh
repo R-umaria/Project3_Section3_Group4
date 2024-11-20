@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\Users\Rishi\OneDrive\Desktop\Projects\Flutter Projects\Flutter_Setup\flutter"
-export "FLUTTER_APPLICATION_PATH=C:\Users\Rishi\source\repos\Project III\theProject\homeease"
+export "FLUTTER_ROOT=C:\flutter\flutter"
+export "FLUTTER_APPLICATION_PATH=C:\Users\alexr\home_ease_app"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"

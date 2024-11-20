@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "homeease" "\0"
+            VALUE "FileDescription", "home_ease_app" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "homeease" "\0"
+            VALUE "InternalName", "home_ease_app" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "homeease.exe" "\0"
-            VALUE "ProductName", "homeease" "\0"
+            VALUE "OriginalFilename", "home_ease_app.exe" "\0"
+            VALUE "ProductName", "home_ease_app" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
