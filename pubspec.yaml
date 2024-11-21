@@ -60,7 +60,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - ./lib/Modules/HMI_Interface/simulated_feed.mp4
+    - assets/sample_video.mp4
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

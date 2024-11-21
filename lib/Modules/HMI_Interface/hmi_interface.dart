@@ -23,10 +23,13 @@ class HMIInterface extends StatelessWidget {
             const Divider(),
             _buildGarageDoorAnimation(),
             const Divider(),
-            _buildFridgeStatus(context),
+            _buildFridgeDoorAnimation(),
+            const Divider(),
+            _buildWaterFilterVisualization(),
             const Divider(),
             _buildLightsStatus(),
             const Divider(),
+            const SizedBox(height: 20),
             _buildBlindsVisualization(),
             const Divider(),
             _buildEntertainmentSystem(),
@@ -95,20 +98,6 @@ class HMIInterface extends StatelessWidget {
     );
   }
 
-  // Garage Door Animation
-  Widget _buildGarageDoorAnimation() {
-    final bool isGarageOpen = sensorData['garageDoorOpen'] ?? false;
-
-    return ListTile(
-      leading: Icon(
-        isGarageOpen ? Icons.garage_outlined : Icons.garage_rounded,
-        color: isGarageOpen ? Colors.green : Colors.red,
-      ),
-      title: const Text('Garage Door'),
-      subtitle: Text('Status: ${isGarageOpen ? "Open" : "Closed"}'),
-    );
-  }
-
   // Fridge Status and Alert
   Widget _buildFridgeStatus(BuildContext context) {
     final bool isFridgeOpen = sensorData['fridgeOpen'] ?? false;
@@ -165,7 +154,67 @@ class HMIInterface extends StatelessWidget {
     );
   }
 
-  // Blinds Visualization
+  // Garage Door Animation
+  Widget _buildGarageDoorAnimation() {
+    final bool isGarageOpen = sensorData['garageDoorOpen'] ?? false;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text('Garage Door',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        ),
+        const SizedBox(height: 10),
+        AnimatedContainer(
+          duration: const Duration(seconds: 1),
+          curve: Curves.easeInOut,
+          height: 200,
+          width: 100,
+          color: isGarageOpen ? Colors.green : Colors.red,
+          child: Center(
+            child: Text(
+              isGarageOpen ? 'Open' : 'Closed',
+              style: const TextStyle(color: Colors.white, fontSize: 18),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+// Fridge Door Animation
+  Widget _buildFridgeDoorAnimation() {
+    final bool isFridgeOpen = sensorData['fridgeOpen'] ?? false;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text('Fridge Door',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        ),
+        const SizedBox(height: 10),
+        AnimatedContainer(
+          duration: const Duration(seconds: 1),
+          curve: Curves.easeInOut,
+          height: 100,
+          width: isFridgeOpen ? 150 : 100,
+          color: isFridgeOpen ? Colors.blue : Colors.grey,
+          child: Center(
+            child: Text(
+              isFridgeOpen ? 'Open' : 'Closed',
+              style: const TextStyle(color: Colors.white, fontSize: 18),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+// Blinds Visualization
   Widget _buildBlindsVisualization() {
     final double blindsPosition = sensorData['blindsPosition'] ?? 50.0;
 
@@ -174,28 +223,91 @@ class HMIInterface extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text('Blinds',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          child: Text(
+            'Blinds',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 200, // Fixed height for the blinds visualization
+          width: double.infinity,
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              // Background layer
+              Container(
+                height: 200,
+                width: double.infinity,
+                color: Colors.grey.shade300,
+              ),
+              // Foreground layer (blinds filling from bottom)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: (blindsPosition / 100) * 200, // Proportional height
+                  width: double.infinity,
+                  color: Colors.brown.shade700,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Center(
+          child: Text(
+            '${blindsPosition.toStringAsFixed(0)}% Open',
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Water Filter Visualization
+  Widget _buildWaterFilterVisualization() {
+    final double waterFilterPercentage =
+        sensorData['waterFilterPercentage'] ?? 100.0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Water Filter Status',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
         ),
         const SizedBox(height: 10),
         Stack(
           children: [
             Container(
+              width: 50,
               height: 100,
-              width: double.infinity,
-              color: Colors.grey.shade300,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.blue, width: 2),
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             Positioned(
-              top: 100 - blindsPosition,
+              bottom: 0,
               child: Container(
-                height: blindsPosition,
-                width: double.infinity,
-                color: Colors.brown.shade700,
+                width: 50,
+                height: waterFilterPercentage,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ],
         ),
-        Center(child: Text('${blindsPosition.toStringAsFixed(0)}% Open')),
+        Center(
+          child: Text(
+            '${waterFilterPercentage.toStringAsFixed(0)}% Remaining',
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
       ],
     );
   }
@@ -274,7 +386,7 @@ class _CameraFeedScreenState extends State<CameraFeedScreen> {
     super.initState();
     player = Player();
     controller = VideoController(player);
-    player.open(Media('simulated_feed.mp4'));
+    player.open(Media('assets/sample_video.mp4'));
   }
 
   @override
