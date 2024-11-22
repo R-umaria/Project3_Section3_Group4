@@ -328,7 +328,8 @@ class HMIInterface extends StatelessWidget {
   }
 
   // Security Cameras
-  Widget _buildSecurityCamera(BuildContext context) {
+  Widget _buildSecurityCamera(BuildContext context,
+      {Widget? cameraFeedScreen}) {
     final bool hasLiveFeed = sensorData['cameraLiveFeed'] ?? false;
 
     return ListTile(
@@ -340,7 +341,7 @@ class HMIInterface extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CameraFeedScreen(),
+              builder: (context) => cameraFeedScreen ?? const Placeholder(),
             ),
           );
         } else {
