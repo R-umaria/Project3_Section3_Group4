@@ -119,6 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (index == _rooms.length) {
                         // "Add Room" Tile
                         return GestureDetector(
+                          key: const Key('addRoomTile'), // Add a unique Key
                           onTap: _addRoom,
                           child: Container(
                             decoration: BoxDecoration(
