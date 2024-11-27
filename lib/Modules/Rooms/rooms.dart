@@ -94,8 +94,8 @@ class _RoomsPageState extends State<RoomsPage> {
               children: [
                 // Room Temperature and Humidity Card
                 Container(
+                  width: 700,
                   padding: const EdgeInsets.all(16),
-                  width: 1000,
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
                     color: const Color(0xFF393D47),
@@ -122,8 +122,8 @@ class _RoomsPageState extends State<RoomsPage> {
                 ),
                 // Devices Card
                 Container(
+                  width: 700,
                   padding: const EdgeInsets.all(16),
-                  width: 1000,
                   decoration: BoxDecoration(
                     color: const Color(0xFF393D47),
                     borderRadius: BorderRadius.circular(12),
@@ -137,46 +137,47 @@ class _RoomsPageState extends State<RoomsPage> {
                       ),
                       const SizedBox(height: 8),
                       Column(
-                        children: widget.room.devices.map((deviceName) {
-                          final device = availableDevices.firstWhere(
-                            (d) => d['name'] == deviceName,
-                            orElse: () => {"icon": Icons.device_unknown, "route": null},
-                          );
-                          return Container(
-                            margin: const EdgeInsets.symmetric(vertical: 4),
-                            child: ListTile(
-                              leading: Icon(device['icon'], color: Colors.white),
-                              title: Text(
-                                deviceName,
-                                style: const TextStyle(color: Colors.white, fontSize: 18),
-                              ),
-                              onTap: () {
-                                if (device['route'] != null) {
-                                  Navigator.pushNamed(context, device['route']);
-                                }
-                              },
-                              trailing: IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.white),
-                                onPressed: () {
-                                  setState(() {
-                                    widget.room.devices.remove(deviceName);
-                                  });
-                                },
-                              ),
-                              tileColor: const Color(0xFF4ECDC4),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
+  children: widget.room.devices.map((deviceName) {
+    final device = availableDevices.firstWhere(
+      (d) => d['name'] == deviceName,
+      orElse: () => {"icon": Icons.device_unknown, "route": null},
+    );
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      decoration: BoxDecoration(
+        color: const Color(0xFF4ECDC4), // Background color for the device button
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ListTile(
+        leading: Icon(device['icon'], color: Colors.white),
+        title: Text(
+          deviceName,
+          style: const TextStyle(color: Colors.white, fontSize: 18),
+        ),
+        onTap: () {
+          if (device['route'] != null) {
+            Navigator.pushNamed(context, device['route']);
+          }
+        },
+        trailing: IconButton(
+          icon: const Icon(Icons.delete, color: Colors.white),
+          onPressed: () {
+            setState(() {
+              widget.room.devices.remove(deviceName);
+            });
+          },
+        ),
+      ),
+    );
+  }).toList(),
+),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
                 // Add Device Button
-                ElevatedButton(
+                ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF9C92A3),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -234,7 +235,8 @@ class _RoomsPageState extends State<RoomsPage> {
                       },
                     );
                   },
-                  child: const Text('Add Device', style: TextStyle(fontSize: 18, color: Colors.white)),
+                  icon: const Icon(Icons.add, color: Colors.white),
+                  label: const Text('Add Device', style: TextStyle(fontSize: 18, color: Colors.white)),
                 ),
               ],
             ),
