@@ -72,12 +72,12 @@ class _RoomsPageState extends State<RoomsPage> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Colors.white, size: 30,),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           widget.room.name,
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: Center(
