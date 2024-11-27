@@ -58,6 +58,9 @@ class _RoomsPageState extends State<RoomsPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Check screen size for responsiveness
+    bool isMobile = MediaQuery.of(context).size.width < 600;
+
     return Scaffold(
       backgroundColor: Color(0xFF2D2F36), // Dark background
       appBar: AppBar(
@@ -75,7 +78,9 @@ class _RoomsPageState extends State<RoomsPage> {
                 style: TextStyle(color: Colors.white, fontSize: 20),
                 decoration: InputDecoration(
                   hintText: 'Bedroom',
-                  hintStyle: TextStyle(color: Colors.white54),
+                  hintStyle: TextStyle(
+                    color: Colors.white54, 
+                  ),
                   border: InputBorder.none,
                 ),
                 onSubmitted: (newName) {
@@ -99,92 +104,123 @@ class _RoomsPageState extends State<RoomsPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Room Info Card
             Container(
+              padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Color(0xFF393D47),
+                color: Color.fromRGBO(41, 47, 54, 1), // Background color
                 borderRadius: BorderRadius.circular(12),
               ),
-              padding: EdgeInsets.all(16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Flex(
+                direction: isMobile ? Axis.vertical : Axis.horizontal,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // Room Info
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Room',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                  // Room Temperature and Humidity Card
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      padding: EdgeInsets.all(30),
+                      margin: EdgeInsets.only(bottom: isMobile ? 16 : 0, right: isMobile ? 0 : 16),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF393D47), // Slightly darker card background
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Room',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          'Temperature: ${widget.room.temperature.toStringAsFixed(1)} °F',
-                          style: TextStyle(color: Colors.white70),
-                        ),
-                        Text(
-                          'Humidity: ${widget.room.humidity.toStringAsFixed(1)}%',
-                          style: TextStyle(color: Colors.white70),
-                        ),
-                      ],
+                          SizedBox(height: 8),
+                          Text(
+                            'Temperature: ${widget.room.temperature.toStringAsFixed(1)} °C',
+                            style: TextStyle(
+                              color: const Color.fromRGBO(156, 146, 163, 0.702),
+                              fontSize: 25,
+                              ),
+                          ),
+                          Text(
+                            'Humidity: ${widget.room.humidity.toStringAsFixed(1)}%',
+                            style: TextStyle(
+                              color: const Color.fromRGBO(156, 146, 163, 0.702),
+                              fontSize: 25,
+                              ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  SizedBox(width: 16),
-                  // Device List
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Devices:',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                  // Devices Card
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF393D47),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Devices:',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 8),
-                        ...widget.room.devices.map((device) {
-                          return Container(
-                            margin: EdgeInsets.symmetric(vertical: 4),
-                            decoration: BoxDecoration(
-                              color: Color(0xFF4E525E),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: ListTile(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                              title: Text(
-                                device,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              trailing: IconButton(
-                                icon: Icon(Icons.delete, color: Colors.white),
-                                onPressed: () {
-                                  setState(() {
-                                    widget.room.devices.remove(device);
-                                  });
-                                },
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ],
+                          SizedBox(height: 8),
+                          Column(
+                            children: widget.room.devices.map((device) {
+                              return Container(
+                                width: 600,
+                                margin: EdgeInsets.symmetric(vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFF4ECDC4), // Devices button color
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ListTile(
+                                  leading: Icon(Icons.kitchen_outlined, color: Color.fromRGBO(245, 255, 245, 1),),
+                                  title: Text(
+                                    device,
+                                    style: TextStyle(
+                                      color: Colors.white, 
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  trailing: IconButton(
+                                    icon: Icon(Icons.delete, color: Colors.white),
+                                    onPressed: () {
+                                      setState(() {
+                                        widget.room.devices.remove(device);
+                                      });
+                                    },
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
             SizedBox(height: 20),
+            // Add Device Button
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF6C63FF),
+                  backgroundColor: Color.fromRGBO(156, 146, 163, 1), // Add Device button color
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -198,7 +234,7 @@ class _RoomsPageState extends State<RoomsPage> {
                       final TextEditingController _deviceController =
                           TextEditingController();
                       return AlertDialog(
-                        title: Text('Add Device'),
+                        title: Text('Add Device',),
                         content: TextField(
                           controller: _deviceController,
                           decoration: InputDecoration(hintText: 'Device Name'),
@@ -224,7 +260,13 @@ class _RoomsPageState extends State<RoomsPage> {
                     },
                   );
                 },
-                child: Text('Add Device'),
+                child: Text(
+                  'Add Device', 
+                  style: TextStyle(
+                    color: Color.fromRGBO(247, 255, 247, 1), 
+                    fontSize: 20
+                  ),
+                ),
               ),
             ),
           ],
