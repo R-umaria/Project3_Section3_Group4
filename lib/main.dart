@@ -1,19 +1,24 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'Modules/hmi_interface/hmi_interface.dart';
-import 'Modules/Temperature/temperature_control.dart';
-import 'Modules/Rooms/rooms.dart';
+import 'Modules/HomeScreen/home_screen.dart';
+import 'package:media_kit/media_kit.dart';
 
 void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: RoomsPage(
-      room: Room(
-        name: "Bedroom",
-        temperature: 78.0,
-        humidity: 96.0,
-        devices: ["Lights", "Fan", "Blinds"],
-      ),
-    ),
-  ));
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensures Flutter services are initialized.
+  MediaKit.ensureInitialized(); // Initialize MediaKit globally.
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Home Ease App',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: HomeScreen(), // Ensure HomeScreen is the starting point
+    );
+  }
 }
