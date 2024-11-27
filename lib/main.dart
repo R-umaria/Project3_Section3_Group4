@@ -12,7 +12,7 @@ void main() {
         name: "Bedroom",
         temperature: 78.0,
         humidity: 96.0,
-        devices: ["Lights", "Fan", "Blinds"],
+        devices: ["Light", "Fan", "Blinds"],
       ),
     ),
   ));
