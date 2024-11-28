@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:home_ease_app/Modules/Lights/light.dart';
+import 'package:home_ease_app/Modules/Lights/lights.dart';
 
 class Room {
   String name;
