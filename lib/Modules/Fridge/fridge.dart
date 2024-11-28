@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Fridge extends StatefulWidget {
   const Fridge({super.key});
@@ -10,25 +11,61 @@ class Fridge extends StatefulWidget {
 class _FridgeState extends State<Fridge> {
   bool _isOpen = false; // Default state is "Closed"
   double _temperature = 35.0; // Default temperature
+  String?
+      _warningMessage; // Warning message for invalid temperature or filter replacement
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFridgeState();
+  }
+
+  Future<void> _loadFridgeState() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isOpen = prefs.getBool('fridge_open') ?? false;
+      _temperature = prefs.getDouble('fridge_temperature') ?? 35.0;
+      _checkTemperatureWarnings();
+    });
+  }
+
+  Future<void> _saveFridgeState() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('fridge_open', _isOpen);
+    await prefs.setDouble('fridge_temperature', _temperature);
+  }
 
   void _toggleDoor() {
     setState(() {
       _isOpen = !_isOpen;
     });
+    _saveFridgeState();
   }
 
   void _increaseTemperature() {
     setState(() {
       _temperature += 0.5;
+      _checkTemperatureWarnings();
     });
+    _saveFridgeState();
   }
 
   void _decreaseTemperature() {
     setState(() {
-      if (_temperature > 0.5) {
-        _temperature -= 0.5;
-      }
+      _temperature -= 0.5;
+      _checkTemperatureWarnings();
     });
+    _saveFridgeState();
+  }
+
+  void _checkTemperatureWarnings() {
+    if (_temperature < 25.0) {
+      _warningMessage = "Invalid Temperature";
+    } else if (_temperature > 45.0) {
+      _warningMessage = "Replace Water Filter";
+    } else {
+      _warningMessage = null;
+    }
   }
 
   @override
@@ -54,14 +91,16 @@ class _FridgeState extends State<Fridge> {
             'Current Temperature: ${_temperature.toStringAsFixed(1)}°F',
             style: const TextStyle(fontSize: 24),
           ),
-          if (_temperature > 45.0) // Display warning if temperature exceeds 45
-            const Padding(
-              padding: EdgeInsets.all(8.0),
+          if (_warningMessage != null)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Replace Water Filter',
+                _warningMessage!,
                 style: TextStyle(
                   fontSize: 18,
-                  color: Colors.red,
+                  color: _warningMessage == "Invalid Temperature"
+                      ? Colors.orange
+                      : Colors.red,
                   fontWeight: FontWeight.bold,
                 ),
               ),
