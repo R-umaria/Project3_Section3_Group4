@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'Modules/hmi_interface/hmi_interface.dart';
+import 'Modules/Rooms/rooms.dart';
 
 void main() {
   runApp(MaterialApp(

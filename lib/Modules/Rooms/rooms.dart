@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_ease_app/Modules/Lights/light.dart';
 
 class Room {
   String name;
@@ -44,7 +45,7 @@ class RoomsPage extends StatefulWidget {
 class _RoomsPageState extends State<RoomsPage> {
   late TextEditingController _roomNameController;
   final List<Map<String, dynamic>> availableDevices = [
-    {"name": "Light", "icon": Icons.lightbulb_outline, "route": '/lights'},
+    {"name": "Light", "icon": Icons.lightbulb_outline, "route": 'package:home_ease_app/Modules/Lights/light.dart'},
     {"name": "Fan", "icon": Icons.ac_unit_outlined, "route": '/fan'},
     {"name": "Blinds", "icon": Icons.blinds_rounded, "route": '/blinds'},
     {"name": "TV", "icon": Icons.tv, "route": '/tv'},
