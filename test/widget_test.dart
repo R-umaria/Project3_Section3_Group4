@@ -6,7 +6,7 @@ void main() {
   testWidgets('TemperatureControl increments and decrements temperature',
       (WidgetTester tester) async {
     // Build TemperatureControl and trigger a frame.
-    await tester.pumpWidget(MaterialApp(home: TemperatureControl()));
+    await tester.pumpWidget(const MaterialApp(home: TemperatureControl()));
 
     // Verify the initial temperature is 22.0°C.
     expect(find.text('Current Temperature: 22.0°C'), findsOneWidget);

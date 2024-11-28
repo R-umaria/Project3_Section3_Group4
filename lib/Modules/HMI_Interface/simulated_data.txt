@@ -1,0 +1,12 @@
+final Map<String, dynamic> simulatedData = {
+  'fanStatus': 'On',
+  'temperatureTrend': [22.0, 23.0, 24.0, 25.0, 26.0],
+  'garageDoorOpen': false,
+  'fridgeOpen': true,
+  'lightsBrightness': 75.0,
+  'lightsColor': Colors.blue,
+  'blindsPosition': 40.0,
+  'tvOn': true,
+  'tvChannel': 'Discovery',
+  'cameraLiveFeed': true,
+};
