@@ -10,8 +10,8 @@ void main() {
     home: RoomsPage(
       room: Room(
         name: "Bedroom",
-        temperature: 78.0,
-        humidity: 96.0,
+        temperature: 20.0,
+        humidity: 16.0,
         devices: ["Light", "Fan", "Blinds"],
       ),
     ),

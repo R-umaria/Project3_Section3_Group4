@@ -137,41 +137,41 @@ class _RoomsPageState extends State<RoomsPage> {
                       ),
                       const SizedBox(height: 8),
                       Column(
-  children: widget.room.devices.map((deviceName) {
-    final device = availableDevices.firstWhere(
-      (d) => d['name'] == deviceName,
-      orElse: () => {"icon": Icons.device_unknown, "route": null},
-    );
+                        children: widget.room.devices.map((deviceName) {
+                          final device = availableDevices.firstWhere(
+                            (d) => d['name'] == deviceName,
+                            orElse: () => {"icon": Icons.device_unknown, "route": null},
+                          );
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      decoration: BoxDecoration(
-        color: const Color(0xFF4ECDC4), // Background color for the device button
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: ListTile(
-        leading: Icon(device['icon'], color: Colors.white),
-        title: Text(
-          deviceName,
-          style: const TextStyle(color: Colors.white, fontSize: 18),
-        ),
-        onTap: () {
-          if (device['route'] != null) {
-            Navigator.pushNamed(context, device['route']);
-          }
-        },
-        trailing: IconButton(
-          icon: const Icon(Icons.delete, color: Colors.white),
-          onPressed: () {
-            setState(() {
-              widget.room.devices.remove(deviceName);
-            });
-          },
-        ),
-      ),
-    );
-  }).toList(),
-),
+                          return Container(
+                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF4ECDC4), // Background color for the device button
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: ListTile(
+                              leading: Icon(device['icon'], color: Colors.white),
+                              title: Text(
+                                deviceName,
+                                style: const TextStyle(color: Colors.white, fontSize: 18),
+                              ),
+                              onTap: () {
+                                if (device['route'] != null) {
+                                  Navigator.pushNamed(context, device['route']);
+                                }
+                              },
+                              trailing: IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.white),
+                                onPressed: () {
+                                  setState(() {
+                                    widget.room.devices.remove(deviceName);
+                                  });
+                                },
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ],
                   ),
                 ),
