@@ -374,6 +374,8 @@ class _ChartData {
 
 // Camera Feed Screen
 class CameraFeedScreen extends StatefulWidget {
+  const CameraFeedScreen({Key? key}) : super(key: key);
+
   @override
   _CameraFeedScreenState createState() => _CameraFeedScreenState();
 }
@@ -381,26 +383,47 @@ class CameraFeedScreen extends StatefulWidget {
 class _CameraFeedScreenState extends State<CameraFeedScreen> {
   late final Player player;
   late final VideoController controller;
+  bool hasError = false; // Track if there's an error with the video feed.
 
   @override
   void initState() {
     super.initState();
     player = Player();
     controller = VideoController(player);
-    player.open(Media('assets/sample_video.mp4'));
+
+    try {
+      player.open(
+        Media('assets/sample_video.mp4'), // Replace with your video path.
+      );
+    } catch (e) {
+      setState(() {
+        hasError = true;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Camera Feed')),
-      body: Center(
-        child: Video(
-          controller: controller,
-          width: double.infinity,
-          height: double.infinity,
-          fit: BoxFit.contain,
+      appBar: AppBar(
+        title: const Text('Camera Feed'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
         ),
+      ),
+      body: Center(
+        child: hasError
+            ? const Text(
+                'Error: Unable to load video feed',
+                style: TextStyle(fontSize: 18, color: Colors.red),
+              )
+            : Video(
+                controller: controller,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.contain,
+              ),
       ),
     );
   }
