@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GarageDoor extends StatefulWidget {
   const GarageDoor({super.key});
@@ -10,10 +11,29 @@ class GarageDoor extends StatefulWidget {
 class _GarageDoorState extends State<GarageDoor> {
   bool _isOpen = false; // Default state is "Closed"
 
+  @override
+  void initState() {
+    super.initState();
+    _loadGarageDoorState();
+  }
+
+  Future<void> _loadGarageDoorState() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isOpen = prefs.getBool('garage_door_open') ?? false;
+    });
+  }
+
+  Future<void> _saveGarageDoorState() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('garage_door_open', _isOpen);
+  }
+
   void _toggleDoor() {
     setState(() {
       _isOpen = !_isOpen;
     });
+    _saveGarageDoorState();
   }
 
   @override
@@ -24,17 +44,13 @@ class _GarageDoorState extends State<GarageDoor> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Centers content vertically
-          crossAxisAlignment:
-              CrossAxisAlignment.center, // Centers content horizontally
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               'Garage Door is ${_isOpen ? "Open" : "Closed"}',
               style: const TextStyle(fontSize: 24),
             ),
-            const SizedBox(
-                height: 20), // Add spacing between the text and button
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _toggleDoor,
               child: Text(_isOpen ? 'Close Door' : 'Open Door'),
