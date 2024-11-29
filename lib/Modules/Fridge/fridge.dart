@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Fridge extends StatefulWidget {
-  const Fridge({super.key});
+class FridgeWidget extends StatefulWidget {
+  const FridgeWidget({Key? key}) : super(key: key);
 
   @override
-  _FridgeState createState() => _FridgeState();
+  _FridgeWidgetState createState() => _FridgeWidgetState();
 }
 
-class _FridgeState extends State<Fridge> {
+class _FridgeWidgetState extends State<FridgeWidget> {
   bool _isOpen = false; // Default state is "Closed"
   double _temperature = 35.0; // Default temperature
   String?
@@ -70,57 +70,46 @@ class _FridgeState extends State<Fridge> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Fridge Control'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+    return Column(
+      children: [
+        Text(
+          'Fridge is ${_isOpen ? "Open" : "Closed"}',
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        ElevatedButton(
+          onPressed: _toggleDoor,
+          child: Text(_isOpen ? 'Close Fridge' : 'Open Fridge'),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Current Temperature: ${_temperature.toStringAsFixed(1)}°F',
+          style: const TextStyle(fontSize: 18),
+        ),
+        if (_warningMessage != null)
           Text(
-            'Fridge is ${_isOpen ? "Open" : "Closed"}',
-            style: const TextStyle(fontSize: 24),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _toggleDoor,
-            child: Text(_isOpen ? 'Close Fridge' : 'Open Fridge'),
-          ),
-          const SizedBox(height: 40),
-          Text(
-            'Current Temperature: ${_temperature.toStringAsFixed(1)}°F',
-            style: const TextStyle(fontSize: 24),
-          ),
-          if (_warningMessage != null)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                _warningMessage!,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: _warningMessage == "Invalid Temperature"
-                      ? Colors.orange
-                      : Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+            _warningMessage!,
+            style: TextStyle(
+              fontSize: 16,
+              color: _warningMessage == "Invalid Temperature"
+                  ? Colors.orange
+                  : Colors.red,
             ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: _decreaseTemperature,
-                child: const Text('-0.5'),
-              ),
-              const SizedBox(width: 20),
-              ElevatedButton(
-                onPressed: _increaseTemperature,
-                child: const Text('+0.5'),
-              ),
-            ],
           ),
-        ],
-      ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: _decreaseTemperature,
+              child: const Text('-0.5°F'),
+            ),
+            const SizedBox(width: 16),
+            ElevatedButton(
+              onPressed: _increaseTemperature,
+              child: const Text('+0.5°F'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
