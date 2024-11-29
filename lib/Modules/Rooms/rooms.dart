@@ -43,6 +43,13 @@ class RoomsPage extends StatefulWidget {
 
 class _RoomsPageState extends State<RoomsPage> {
   late TextEditingController _roomNameController;
+  final List<Map<String, dynamic>> availableDevices = [
+    {"name": "Light", "icon": Icons.lightbulb_outline, "route": '/lights'},
+    {"name": "Fan", "icon": Icons.ac_unit_outlined, "route": '/fan'},
+    {"name": "Blinds", "icon": Icons.blinds_rounded, "route": '/blinds'},
+    {"name": "TV", "icon": Icons.tv, "route": '/tv'},
+    {"name": "Refrigerator", "icon": Icons.kitchen_outlined, "route": '/refrigerator'},
+  ];
 
   @override
   void initState() {
@@ -59,114 +66,181 @@ class _RoomsPageState extends State<RoomsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF2D2F36), // Dark background
       appBar: AppBar(
-        title: Text('Room Settings'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Colors.white, size: 30,),
           onPressed: () => Navigator.pop(context),
         ),
+        title: Text(
+          widget.room.name,
+          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color.fromRGBO(41, 47, 54, 1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _roomNameController,
-                    decoration: InputDecoration(
-                      labelText: 'Room Name',
-                      border: OutlineInputBorder(),
-                    ),
-                    onSubmitted: (newName) {
-                      setState(() {
-                        widget.room.name = newName;
-                      });
-                    },
+                // Room Temperature and Humidity Card
+                Container(
+                  width: 700,
+                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF393D47),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Room',
+                        style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Temperature: ${widget.room.temperature.toStringAsFixed(1)} °C',
+                        style: const TextStyle(color: Color.fromRGBO(156, 146, 163, 0.7), fontSize: 18),
+                      ),
+                      Text(
+                        'Humidity: ${widget.room.humidity.toStringAsFixed(1)}%',
+                        style: const TextStyle(color: Color.fromRGBO(156, 146, 163, 0.7), fontSize: 18),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(width: 16),
-                TextButton(
+                // Devices Card
+                Container(
+                  width: 700,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF393D47),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Devices',
+                        style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      Column(
+                        children: widget.room.devices.map((deviceName) {
+                          final device = availableDevices.firstWhere(
+                            (d) => d['name'] == deviceName,
+                            orElse: () => {"icon": Icons.device_unknown, "route": null},
+                          );
+
+                          return Container(
+                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF4ECDC4), // Background color for the device button
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: ListTile(
+                              leading: Icon(device['icon'], color: Colors.white),
+                              title: Text(
+                                deviceName,
+                                style: const TextStyle(color: Colors.white, fontSize: 18),
+                              ),
+                              onTap: () {
+                                if (device['route'] != null) {
+                                  Navigator.pushNamed(context, device['route']);
+                                }
+                              },
+                              trailing: IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.white),
+                                onPressed: () {
+                                  setState(() {
+                                    widget.room.devices.remove(deviceName);
+                                  });
+                                },
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Add Device Button
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF9C92A3),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  ),
                   onPressed: () {
-                    setState(() {
-                      widget.room.name = _roomNameController.text;
-                    });
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        String? selectedDevice;
+                        return AlertDialog(
+                          title: const Text('Add Device'),
+                          content: DropdownButtonFormField<String>(
+                            value: selectedDevice,
+                            items: availableDevices.map((device) {
+                              return DropdownMenuItem<String>(
+                                value: device['name'],
+                                child: Row(
+                                  children: [
+                                    Icon(device['icon'], color: Colors.black),
+                                    const SizedBox(width: 8),
+                                    Text(device['name']),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedDevice = value;
+                              });
+                            },
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Select a Device',
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                if (selectedDevice != null) {
+                                  setState(() {
+                                    widget.room.addDevice(selectedDevice!);
+                                  });
+                                }
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Add'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
-                  child: Text('Update'),
+                  icon: const Icon(Icons.add, color: Colors.white),
+                  label: const Text('Add Device', style: TextStyle(fontSize: 18, color: Colors.white)),
                 ),
               ],
             ),
-            SizedBox(height: 20),
-            Card(
-              child: ListTile(
-                title: Text('Temperature: ${widget.room.temperature.toStringAsFixed(1)} °C'),
-                subtitle: Text('Humidity: ${widget.room.humidity.toStringAsFixed(1)} %'),
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Devices:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: widget.room.devices.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(widget.room.devices[index]),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          widget.room.devices.removeAt(index);
-                        });
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Add device dialog
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    final TextEditingController _deviceController =
-                        TextEditingController();
-                    return AlertDialog(
-                      title: Text('Add Device'),
-                      content: TextField(
-                        controller: _deviceController,
-                        decoration: InputDecoration(hintText: 'Device Name'),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              widget.room.addDevice(_deviceController.text);
-                            });
-                            Navigator.pop(context);
-                          },
-                          child: Text('Add'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Text('Add Device'),
-            ),
-          ],
+          ),
         ),
       ),
     );
