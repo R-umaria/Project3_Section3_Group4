@@ -3,90 +3,88 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TemperatureControl extends StatefulWidget {
-  const TemperatureControl({super.key});
+  final double initialTemperature;
+  final Function(double) onTemperatureChange;
+
+  const TemperatureControl({
+    Key? key,
+    required this.initialTemperature,
+    required this.onTemperatureChange,
+  }) : super(key: key);
 
   @override
   _TemperatureControlState createState() => _TemperatureControlState();
 }
 
 class _TemperatureControlState extends State<TemperatureControl> {
-  double _currentTemperature = 23.0; // Default current temperature
-  double _desiredTemperature = 22.0; // Default desired temperature
+  late double _currentTemperature;
+  late double _desiredTemperature;
   String _fanStatus = "Off"; // Default fan status
   Timer? _adjustTimer;
 
   @override
   void initState() {
     super.initState();
+    _currentTemperature = widget.initialTemperature;
+    _desiredTemperature = widget.initialTemperature;
     _log('Initializing TemperatureControl widget');
-    _loadSavedPreferences(); // Load saved preferences on startup
+    _loadSavedPreferences();
   }
 
   @override
   void dispose() {
     _log('Disposing TemperatureControl widget');
-    _adjustTimer?.cancel(); // Clean up the timer
+    _adjustTimer?.cancel();
     super.dispose();
   }
 
-  // Load saved preferences
   Future<void> _loadSavedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _currentTemperature = prefs.getDouble('currentTemperature') ?? 23.0;
-      _desiredTemperature = prefs.getDouble('desiredTemperature') ?? 22.0;
+      _currentTemperature =
+          prefs.getDouble('currentTemperature') ?? _currentTemperature;
+      _desiredTemperature =
+          prefs.getDouble('desiredTemperature') ?? _desiredTemperature;
       _fanStatus = prefs.getString('fanStatus') ?? "Off";
-      _log('Loaded preferences: currentTemperature=$_currentTemperature, '
-          'desiredTemperature=$_desiredTemperature, fanStatus=$_fanStatus');
     });
   }
 
-  // Save preferences
   Future<void> _savePreferences() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('currentTemperature', _currentTemperature);
     await prefs.setDouble('desiredTemperature', _desiredTemperature);
     await prefs.setString('fanStatus', _fanStatus);
-    _log('Saved preferences: currentTemperature=$_currentTemperature, '
-        'desiredTemperature=$_desiredTemperature, fanStatus=$_fanStatus');
   }
 
   void _startAdjustment() {
-    _log('Starting temperature adjustment in $_fanStatus mode');
-    _adjustTimer?.cancel(); // Stop any existing timer
+    _adjustTimer?.cancel();
     if (_fanStatus == "Auto" || _fanStatus == "On") {
       _adjustTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
         setState(() {
           if (_currentTemperature > _desiredTemperature) {
             _currentTemperature -= 0.5;
-            _log(
-                'Adjusting temperature: currentTemperature=$_currentTemperature');
             if (_currentTemperature <= _desiredTemperature) {
-              _currentTemperature = _desiredTemperature; // Snap to exact value
-              _log('Temperature reached desired value: $_currentTemperature');
-              timer.cancel(); // Stop the timer
+              _currentTemperature = _desiredTemperature;
+              timer.cancel();
             }
           } else if (_currentTemperature < _desiredTemperature) {
             _currentTemperature += 0.5;
-            _log(
-                'Adjusting temperature: currentTemperature=$_currentTemperature');
             if (_currentTemperature >= _desiredTemperature) {
-              _currentTemperature = _desiredTemperature; // Snap to exact value
-              _log('Temperature reached desired value: $_currentTemperature');
-              timer.cancel(); // Stop the timer
+              _currentTemperature = _desiredTemperature;
+              timer.cancel();
             }
           }
         });
-        _savePreferences(); // Save temperature adjustments
+        widget.onTemperatureChange(_currentTemperature);
+        _savePreferences();
       });
     }
   }
 
   void _setDesiredTemperature(double value) {
-    _log('Setting desired temperature: $value');
     setState(() {
       _desiredTemperature = value;
-      _savePreferences(); // Save desired temperature
+      _savePreferences();
       if (_fanStatus == "Auto" || _fanStatus == "On") {
         _startAdjustment();
       }
@@ -94,131 +92,92 @@ class _TemperatureControlState extends State<TemperatureControl> {
   }
 
   void _toggleFanStatus(String newStatus) {
-    _log('Fan status changed to: $newStatus');
     setState(() {
       _fanStatus = newStatus;
-      _savePreferences(); // Save fan status
+      _savePreferences();
       if (newStatus == "Auto" || newStatus == "On") {
         _startAdjustment();
       } else {
-        _adjustTimer?.cancel(); // Stop adjustment for "Off"
+        _adjustTimer?.cancel();
       }
     });
   }
 
   void _log(String message) {
-    // Custom log function to include class name
     debugPrint('[TemperatureControl] $message');
   }
 
   @override
   Widget build(BuildContext context) {
-    _log('Building TemperatureControl widget');
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Temperature Control'),
-        backgroundColor: Colors.blueAccent,
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color.fromRGBO(41, 47, 54, 1),
+        borderRadius: BorderRadius.circular(12),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            width: 300, // Adjusted width for better spacing
-            margin: const EdgeInsets.all(16.0),
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Fan Status:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              DropdownButton<String>(
+                dropdownColor: const Color(0xFF2D2F36),
+                value: _fanStatus,
+                items: ['Off', 'On', 'Auto']
+                    .map((status) => DropdownMenuItem(
+                          value: status,
+                          child: Text(
+                            status,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ))
+                    .toList(),
+                onChanged: (String? newStatus) {
+                  _toggleFanStatus(newStatus!);
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Current Temperature: ${_currentTemperature.toStringAsFixed(1)}°C',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
               color: Colors.white,
-              borderRadius: BorderRadius.circular(12.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Fan Status Section
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Fan Status:',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Expanded(
-                      child: DropdownButton<String>(
-                        isExpanded:
-                            true, // Ensure dropdown fits the available space
-                        value: _fanStatus,
-                        items: ['Off', 'On', 'Auto']
-                            .map((status) => DropdownMenuItem(
-                                  value: status,
-                                  child: Text(
-                                    status,
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                ))
-                            .toList(),
-                        onChanged: (String? newStatus) {
-                          _toggleFanStatus(newStatus!);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-
-                // Current Temperature Display
-                Text(
-                  'Current Temperature:',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[700],
-                  ),
-                ),
-                Text(
-                  '${_currentTemperature.toStringAsFixed(1)}°C',
-                  style: const TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Desired Temperature Display
-                Text(
-                  'Desired Temperature:',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[700],
-                  ),
-                ),
-                Slider(
-                  value: _desiredTemperature,
-                  min: 15.0, // Updated range
-                  max: 30.0, // Updated range
-                  divisions: 30,
-                  activeColor: Colors.blueAccent,
-                  inactiveColor: Colors.blue[100],
-                  label: '${_desiredTemperature.toStringAsFixed(1)}°C',
-                  onChanged: (value) {
-                    _setDesiredTemperature(value);
-                  },
-                ),
-                const SizedBox(height: 20),
-              ],
             ),
           ),
-        ),
+          const SizedBox(height: 8),
+          Text(
+            'Desired Temperature:',
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.white70,
+            ),
+          ),
+          Slider(
+            value: _desiredTemperature,
+            min: 15.0,
+            max: 30.0,
+            divisions: 30,
+            activeColor: Colors.blueAccent,
+            inactiveColor: Colors.blue[100],
+            label: '${_desiredTemperature.toStringAsFixed(1)}°C',
+            onChanged: (value) {
+              _setDesiredTemperature(value);
+            },
+          ),
+        ],
       ),
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
     );
   }
 }
