@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final TextEditingController _roomNameController =
             TextEditingController();
         return AlertDialog(
-          backgroundColor: const Color.fromRGBO(41, 47, 54, 1),
+          backgroundColor: const Color.fromARGB(255, 47, 47, 47),
           title: const Text(
             'Add Room',
             style: TextStyle(color: Colors.white),
@@ -110,20 +110,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2D2F36), // Match RoomsPage background
+      backgroundColor: const Color.fromRGBO(247, 255, 247, 1), // Match RoomsPage background - Mint
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          'Smart Home Dashboard',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          'HomeEase',
+          style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold, color: Color.fromRGBO(41, 41, 41, 1)),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             ElevatedButton.icon(
               onPressed: _showSecurityOptions,
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 textStyle: const TextStyle(fontSize: 16),
               ),
-              icon: const Icon(Icons.security, color: Colors.white),
+              icon: const Icon(Icons.lock, color: Colors.white),
               label: const Text(
                 'Security',
                 style: TextStyle(color: Colors.white),
@@ -155,14 +155,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: _addRoom,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.green[100],
+                          color: const Color.fromRGBO(78, 205, 196, 1),
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.green, width: 2),
                         ),
                         child: const Center(
                           child: Icon(
                             Icons.add,
-                            color: Colors.green,
+                            color: const Color.fromRGBO(247, 255, 247, 1),
                             size: 36,
                           ),
                         ),
@@ -181,10 +180,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8),
+                      
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(41, 47, 54, 1),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.blue, width: 2),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
