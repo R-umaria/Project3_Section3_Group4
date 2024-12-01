@@ -143,9 +143,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
           const SizedBox(height: 16), // Add spacing
-             // Rooms Title
+             // Rooms Grid
+            Expanded(
+  child: Center(
+    child: SizedBox(
+      width: 1000, // Set a max width for the grid and its content
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // Align content to the left
+        children: [
+          // Heading "Rooms"
           const Padding(
-            padding: EdgeInsets.only(left: 8.0), // Add slight padding for alignment
+            padding: EdgeInsets.symmetric(vertical: 8.0), // Adjust padding for alignment
             child: Text(
               'Rooms',
               style: TextStyle(
@@ -155,82 +163,86 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          // Rooms Grid
-            Expanded(
-  child: Center(
-    child: SizedBox(
-      width: 1000,
-       // Set a max width for the grid
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Keep 2 columns
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-          childAspectRatio: 5, // Adjust as necessary
-        ),
-        itemCount: _rooms.length + 1,
-        itemBuilder: (context, index) {
-          if (index == _rooms.length) {
-            return GestureDetector(
-              key: const Key('addRoomTile'),
-              onTap: _addRoom,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(78, 205, 196, 1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.add,
-                    color: Color.fromRGBO(247, 255, 247, 1),
-                    size: 28,
-                  ),
-                ),
+
+          // Spacing between heading and grid
+          const SizedBox(height: 8),
+
+          // GridView for buttons
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Keep 2 columns
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 5, // Adjust aspect ratio as necessary
               ),
-            );
-          }
-          final room = _rooms[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RoomsPage(room: room),
-                ),
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: const Color.fromRGBO(41, 47, 54, 1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.meeting_room,
-                    color: Colors.white,
-                    size: 28,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    room.name,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+              itemCount: _rooms.length + 1,
+              itemBuilder: (context, index) {
+                if (index == _rooms.length) {
+                  return GestureDetector(
+                    key: const Key('addRoomTile'),
+                    onTap: _addRoom,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(78, 205, 196, 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.add,
+                          color: Color.fromRGBO(247, 255, 247, 1),
+                          size: 28,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                final room = _rooms[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RoomsPage(room: room),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(41, 47, 54, 1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.meeting_room,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          room.name,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                );
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
     ),
   ),
 ),
+
 
           ],
         ),
