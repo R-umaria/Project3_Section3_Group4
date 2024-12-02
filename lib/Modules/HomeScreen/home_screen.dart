@@ -139,10 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            const SizedBox(height: 16),
-
-
-          const SizedBox(height: 16), // Add spacing
+            const SizedBox(height: 16), // Add spacing
              // Rooms Grid
             Expanded(
   child: Center(

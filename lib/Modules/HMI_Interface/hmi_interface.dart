@@ -21,11 +21,13 @@ class TemperatureGraph extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        
+        const SizedBox(height: 16), // Add spacing
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             'Temperature Trend',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color.fromRGBO(247, 255, 247, 1)),
           ),
         ),
         const SizedBox(height: 10),
@@ -159,7 +161,7 @@ class EntertainmentSystemVisualization extends StatelessWidget {
         isTvOn ? Icons.tv : Icons.tv_off,
         color: isTvOn ? Colors.green : Colors.red,
       ),
-      title: const Text('Entertainment System'),
+      title: const Text('Entertainment System', style: TextStyle(color: Color.fromRGBO(247, 255, 247, 1)),),
       subtitle: Text(
           isTvOn ? 'TV On - Channel: $channel, Volume: $volume' : 'TV Off'),
     );
@@ -342,7 +344,6 @@ class _LightsWidgetState extends State<LightsWidget> {
             });
           },
         ),
-        const SizedBox(height: 16),
 
         // Color Dropdown
         DropdownButton<Color>(
