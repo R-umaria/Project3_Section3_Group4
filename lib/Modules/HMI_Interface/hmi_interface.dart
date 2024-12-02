@@ -78,7 +78,7 @@ class BlindsVisualization extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             'Blinds',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color.fromRGBO(247, 255, 247, 1)),
           ),
         ),
         const SizedBox(height: 10),
@@ -118,8 +118,8 @@ class BlindsVisualization extends StatelessWidget {
                   width: 1000,
                   height: (blindsPosition / 100) * 200,
                   decoration: const BoxDecoration(
-                    color:const Color.fromRGBO(59, 65, 73, 1),
-                    border: Border(bottom: BorderSide(width: 3, color: Color.fromRGBO(156, 146, 163, 1)),),
+                    color:const Color.fromRGBO(59, 65, 73, 0.8),
+                    border: Border(bottom: BorderSide(width: 3, color: Color.fromRGBO(47, 47, 47, 1)),),
 
                   )
                 ),
@@ -130,8 +130,8 @@ class BlindsVisualization extends StatelessWidget {
         ),
         Center(
           child: Text(
-            '${blindsPosition.toStringAsFixed(0)}% Open',
-            style: const TextStyle(fontSize: 16),
+            '${blindsPosition.toStringAsFixed(0)}% Shut',
+            style: const TextStyle(fontSize: 16, color: Color.fromRGBO(247, 255, 247, 1) ),
           ),
         ),
       ],

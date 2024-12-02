@@ -361,6 +361,12 @@ class _RoomsPageState extends State<RoomsPage> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Container(
+            constraints: const BoxConstraints(
+              minWidth: 300,
+              minHeight: 300,
+              maxWidth: 1000,
+              maxHeight: 1000,
+            ),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: const Color.fromRGBO(59, 69, 73, 1),
