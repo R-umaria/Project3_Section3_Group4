@@ -16,27 +16,32 @@ class LightsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        Slider(
-          value: brightness,
-          min: 0.0,
-          max: 100.0,
-          divisions: 100,
-          label: '${brightness.toInt()}%',
-          onChanged: (newBrightness) {
-            onBrightnessChange?.call(newBrightness);
-          },
+        SizedBox(
+          width: 600,
+          child: Slider(
+            value: brightness,
+            min: 0.0,
+            max: 100.0,
+            divisions: 100,
+            activeColor: const Color.fromRGBO(78, 205, 196, 1),
+            inactiveColor: const Color.fromARGB(126, 155, 203, 200),
+            label: '${brightness.toInt()}%',
+            onChanged: (newBrightness) {
+              onBrightnessChange?.call(newBrightness);
+            },
+          ),
         ),
         DropdownButton<Color>(
           value: color,
-          items: [
-            DropdownMenuItem(value: Colors.red, child: const Text('Red')),
-            DropdownMenuItem(value: Colors.green, child: const Text('Green')),
-            DropdownMenuItem(value: Colors.blue, child: const Text('Blue')),
-            DropdownMenuItem(value: Colors.yellow, child: const Text('Yellow')),
-            DropdownMenuItem(value: Colors.white, child: const Text('White')),
-            DropdownMenuItem(value: Colors.orange, child: const Text('Orange')),
+          items: const [
+            DropdownMenuItem(value: Colors.red, child: Text('Red', style: TextStyle(color: Color.fromRGBO(247, 255, 247, 1)),)),
+            DropdownMenuItem(value: Colors.green, child: Text('Green', style: TextStyle(color: Color.fromRGBO(247, 255, 247, 1)),)),
+            DropdownMenuItem(value: Colors.blue, child: Text('Blue', style: TextStyle(color: Color.fromRGBO(247, 255, 247, 1)),)),
+            DropdownMenuItem(value: Colors.yellow, child: Text('Yellow', style: TextStyle(color: Color.fromRGBO(247, 255, 247, 1)),)),
+            DropdownMenuItem(value: Colors.white, child: Text('White', style: TextStyle(color: Color.fromRGBO(247, 255, 247, 1)),)),
+            DropdownMenuItem(value: Colors.orange, child: Text('Orange', style: TextStyle(color: Color.fromRGBO(247, 255, 247, 1)),)),
           ],
           onChanged: (newColor) {
             onColorChange?.call(newColor!);

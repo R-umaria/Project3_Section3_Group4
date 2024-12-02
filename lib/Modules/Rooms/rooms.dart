@@ -252,9 +252,10 @@ class _RoomsPageState extends State<RoomsPage> {
                         Icons.lightbulb,
                         color: color.withOpacity(brightness / 100),
                       ),
-                      title: const Text('Lights Visualization'),
+                      title: const Text('Lights Visualization',style: TextStyle(color:Color.fromRGBO(247, 255, 247, 1)),),
                       subtitle: Text(
                         'Brightness: ${brightness.toStringAsFixed(0)}%, Color: ${_getColorName(color)}',
+                        style: const TextStyle(color:Color.fromRGBO(247, 255, 247, 1)),
                       ),
                     );
                   },
@@ -357,100 +358,130 @@ class _RoomsPageState extends State<RoomsPage> {
         ),
       ),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color.fromRGBO(59, 69, 73, 1),
-              borderRadius: BorderRadius.circular(12),
+  child: Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: Container(
+      constraints: const BoxConstraints(
+        minWidth: 300,
+        minHeight: 300,
+        maxWidth: 1000,
+        maxHeight: 800,
+      ),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color.fromRGBO(59, 69, 73, 1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          TextField(
+            controller: _roomNameController,
+            decoration: const InputDecoration(
+              labelText: 'Room Name',
+              labelStyle: TextStyle(color: Colors.white),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white, width: 1),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue),
+              ),
             ),
-            child: Column(
+            style: const TextStyle(color: Colors.white),
+            onSubmitted: (newName) {
+              setState(() {
+                widget.room.name = newName;
+              });
+            },
+          ),
+          const SizedBox(height: 16),
+          Flexible(
+            child: ListView(
               children: [
-                TextField(
-                  controller: _roomNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Room Name',
-                    labelStyle: TextStyle(color: Colors.white),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
+                ...widget.room.devices.map((deviceName) {
+                  // Find the matching device in the availableDevices list
+                  final device = availableDevices.firstWhere(
+                    (d) => d['name'] == deviceName,
+                    orElse: () => {"name": deviceName, "icon": Icons.device_unknown}, // Default if not found
+                  );
+
+                  return Container(
+                    width: 800,
+                    margin: const EdgeInsets.symmetric(vertical: 3.0), // Optional for spacing
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(78, 205, 196, 1), // Background color of the ListTile
+                      borderRadius: BorderRadius.circular(8.0), // Optional rounded corners
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                  ),
-                  style: const TextStyle(color: Colors.white),
-                  onSubmitted: (newName) {
-                    setState(() {
-                      widget.room.name = newName;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                Flexible(
-                  child: ListView(
-                    children: [
-                      ...widget.room.devices.map((deviceName) {
-                        return ListTile(
-                          title: Text(
-                            deviceName,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 18),
-                          ),
-                          leading: const Icon(Icons.device_unknown,
-                              color: Colors.white),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () {
-                              setState(() {
-                                widget.room.removeDevice(deviceName);
-                              });
-                            },
-                          ),
-                          onTap: () {
-                            _setActiveControl(deviceName);
-                          },
-                        );
-                      }),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
+                    child: ListTile(
+                      title: Text(
+                        deviceName,
+                        style: const TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      leading: Icon(
+                        device['icon'], // Use the icon from the matched device
+                        color: const Color.fromRGBO(247, 255, 247, 1),
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete, color: Color.fromRGBO(247, 255, 247, 1)),
                         onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Add Device'),
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: availableDevices.map((device) {
-                                      return ListTile(
-                                        title: Text(device['name']),
-                                        leading: Icon(device['icon']),
-                                        onTap: () {
-                                          _addDevice(device['name']);
-                                          Navigator.pop(context);
-                                        },
-                                      );
-                                    }).toList(),
-                                  ),
-                                ),
-                              );
-                            },
+                          setState(() {
+                            widget.room.removeDevice(deviceName);
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        _setActiveControl(deviceName);
+                      },
+                    ),
+                  );
+                }).toList(),
+                const SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.center, // Center-align the button
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(150, 40), // Explicitly set width and height
+                      backgroundColor: const Color.fromRGBO(156, 146, 163, 1),
+                      foregroundColor: const Color.fromRGBO(247, 255, 247, 1),
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Add Device'),
+                            content: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: availableDevices.map((device) {
+                                  return ListTile(
+                                    title: Text(device['name']),
+                                    leading: Icon(device['icon']),
+                                    onTap: () {
+                                      _addDevice(device['name']);
+                                      Navigator.pop(context);
+                                    },
+                                  );
+                                }).toList(),
+                              ),
+                            ),
                           );
                         },
-                        child: const Text('Add Device'),
-                      ),
-                    ],
+                      );
+                    },
+                    child: const Text('Add Device'),
                   ),
                 ),
-                const SizedBox(height: 16),
-                _buildActiveControl(),
               ],
             ),
           ),
-        ),
+          const SizedBox(height: 16),
+          _buildActiveControl(),
+        ],
       ),
+    ),
+  ),
+),
+
     );
   }
 }

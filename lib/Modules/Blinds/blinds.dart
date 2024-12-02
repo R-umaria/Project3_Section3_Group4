@@ -14,17 +14,28 @@ class BlindsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Slider(
-          value: position,
-          min: 0.0,
-          max: 100.0,
-          divisions: 100,
-          label: '${position.toInt()}%',
-          onChanged: (newPosition) {
-            onBlindsPositionChange?.call(newPosition);
-          },
+        ConstrainedBox(
+          constraints: const BoxConstraints(
+            minWidth: 100,
+            maxWidth: 200,
+          ),
         ),
-        Text('Blinds Position: ${position.toInt()}%'),
+        Container(
+          width: 600,
+          child: Slider(
+            value: position,
+            min: 0.0,
+            max: 100.0,
+            divisions: 100,
+            activeColor: const Color.fromRGBO(78, 205, 196, 1),
+            inactiveColor: const Color.fromARGB(126, 155, 203, 200),
+            label: '${position.toInt()}%',
+            onChanged: (newPosition) {
+              onBlindsPositionChange?.call(newPosition);
+            },
+          ),
+        ),
+        Text('Blinds Position: ${position.toInt()}%', style: TextStyle(color: Color.fromRGBO(247, 255, 247, 1)),),
       ],
     );
   }

@@ -110,6 +110,12 @@ class _TemperatureControlState extends State<TemperatureControl> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: const BoxConstraints(
+      minWidth: 300,
+      minHeight: 100,
+      maxWidth: 950,
+      maxHeight: 210,
+    ),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: const Color.fromRGBO(41, 47, 54, 1),
@@ -157,9 +163,9 @@ class _TemperatureControlState extends State<TemperatureControl> {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
+          const Text(
             'Desired Temperature:',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               color: Colors.white70,
             ),
@@ -169,8 +175,8 @@ class _TemperatureControlState extends State<TemperatureControl> {
             min: 15.0,
             max: 30.0,
             divisions: 30,
-            activeColor: Colors.blueAccent,
-            inactiveColor: Colors.blue[100],
+            activeColor: const Color.fromRGBO(78, 205, 196, 1),
+            inactiveColor: const Color.fromARGB(126, 155, 203, 200),
             label: '${_desiredTemperature.toStringAsFixed(1)}°C',
             onChanged: (value) {
               _setDesiredTemperature(value);

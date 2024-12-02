@@ -21,11 +21,13 @@ class TemperatureGraph extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        
+        const SizedBox(height: 16), // Add spacing
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             'Temperature Trend',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color.fromRGBO(247, 255, 247, 1)),
           ),
         ),
         const SizedBox(height: 10),
@@ -78,33 +80,60 @@ class BlindsVisualization extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             'Blinds',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color.fromRGBO(247, 255, 247, 1)),
           ),
         ),
         const SizedBox(height: 10),
         SizedBox(
           height: 200,
+          width: 1000,
           child: Stack(
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.bottomLeft,
             children: [
               Container(
-                height: 200,
-                color: Colors.grey.shade300,
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: (blindsPosition / 100) * 200,
-                  color: Colors.brown.shade700,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [
+                      0.17,
+                      0.34,
+                      0.51,
+                      0.68,
+                      0.85,
+                      0.99,
+                    ],
+                    colors: [
+                    Color.fromRGBO(255, 242, 189, 1),
+                    Color.fromRGBO(244, 215, 151, 1),
+                    Color.fromRGBO(235, 181, 1381, 1),
+                    Color.fromRGBO(218, 127, 125, 1),
+                    Color.fromRGBO(181, 114, 142, 1),
+                    Color.fromRGBO(119, 110, 153, 1),
+                    ],
+                  )
                 ),
               ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  width: 1000,
+                  height: (blindsPosition / 100) * 200,
+                  decoration: const BoxDecoration(
+                    color:const Color.fromRGBO(59, 65, 73, 0.8),
+                    border: Border(bottom: BorderSide(width: 3, color: Color.fromRGBO(47, 47, 47, 1)),),
+
+                  )
+                ),
+                ),
+              
             ],
           ),
         ),
         Center(
           child: Text(
-            '${blindsPosition.toStringAsFixed(0)}% Open',
-            style: const TextStyle(fontSize: 16),
+            '${blindsPosition.toStringAsFixed(0)}% Shut',
+            style: const TextStyle(fontSize: 16, color: Color.fromRGBO(247, 255, 247, 1) ),
           ),
         ),
       ],
@@ -132,7 +161,7 @@ class EntertainmentSystemVisualization extends StatelessWidget {
         isTvOn ? Icons.tv : Icons.tv_off,
         color: isTvOn ? Colors.green : Colors.red,
       ),
-      title: const Text('Entertainment System'),
+      title: const Text('Entertainment System', style: TextStyle(color: Color.fromRGBO(247, 255, 247, 1)),),
       subtitle: Text(
           isTvOn ? 'TV On - Channel: $channel, Volume: $volume' : 'TV Off'),
     );
@@ -315,7 +344,6 @@ class _LightsWidgetState extends State<LightsWidget> {
             });
           },
         ),
-        const SizedBox(height: 16),
 
         // Color Dropdown
         DropdownButton<Color>(
