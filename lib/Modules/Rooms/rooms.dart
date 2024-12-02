@@ -252,9 +252,10 @@ class _RoomsPageState extends State<RoomsPage> {
                         Icons.lightbulb,
                         color: color.withOpacity(brightness / 100),
                       ),
-                      title: const Text('Lights Visualization'),
+                      title: const Text('Lights Visualization',style: TextStyle(color:Color.fromRGBO(247, 255, 247, 1)),),
                       subtitle: Text(
                         'Brightness: ${brightness.toStringAsFixed(0)}%, Color: ${_getColorName(color)}',
+                        style: const TextStyle(color:Color.fromRGBO(247, 255, 247, 1)),
                       ),
                     );
                   },

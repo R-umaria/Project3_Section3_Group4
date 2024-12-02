@@ -84,20 +84,47 @@ class BlindsVisualization extends StatelessWidget {
         const SizedBox(height: 10),
         SizedBox(
           height: 200,
+          width: 1000,
           child: Stack(
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.bottomLeft,
             children: [
               Container(
-                height: 200,
-                color: Colors.grey.shade300,
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: (blindsPosition / 100) * 200,
-                  color: Colors.brown.shade700,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [
+                      0.17,
+                      0.34,
+                      0.51,
+                      0.68,
+                      0.85,
+                      0.99,
+                    ],
+                    colors: [
+                    Color.fromRGBO(255, 242, 189, 1),
+                    Color.fromRGBO(244, 215, 151, 1),
+                    Color.fromRGBO(235, 181, 1381, 1),
+                    Color.fromRGBO(218, 127, 125, 1),
+                    Color.fromRGBO(181, 114, 142, 1),
+                    Color.fromRGBO(119, 110, 153, 1),
+                    ],
+                  )
                 ),
               ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  width: 1000,
+                  height: (blindsPosition / 100) * 200,
+                  decoration: const BoxDecoration(
+                    color:const Color.fromRGBO(59, 65, 73, 1),
+                    border: Border(bottom: BorderSide(width: 3, color: Color.fromRGBO(156, 146, 163, 1)),),
+
+                  )
+                ),
+                ),
+              
             ],
           ),
         ),
