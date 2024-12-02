@@ -341,19 +341,19 @@ class _RoomsPageState extends State<RoomsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2D2F36),
+      backgroundColor: const Color.fromRGBO(247, 255, 247, 1),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
+          icon: const Icon(Icons.arrow_back, color: Color.fromRGBO(59, 69, 73, 1), size: 30),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           widget.room.name,
           style: const TextStyle(
-              fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 30, fontWeight: FontWeight.bold, color: Color.fromRGBO(59, 69, 73, 1)),
         ),
       ),
       body: Center(
@@ -362,7 +362,7 @@ class _RoomsPageState extends State<RoomsPage> {
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color.fromRGBO(41, 47, 54, 1),
+              color: const Color.fromRGBO(59, 69, 73, 1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(

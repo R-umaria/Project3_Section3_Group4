@@ -14,13 +14,14 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Room> _rooms = [];
 
   void _addRoom() {
+    // Navigate to the room creation screen (provided by the Rooms module)
     showDialog(
       context: context,
       builder: (BuildContext context) {
         final TextEditingController _roomNameController =
             TextEditingController();
         return AlertDialog(
-          backgroundColor: const Color.fromRGBO(41, 47, 54, 1),
+          backgroundColor: const Color.fromARGB(255, 47, 47, 47),
           title: const Text(
             'Add Room',
             style: TextStyle(color: Colors.white),
@@ -67,10 +68,10 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: const Color.fromARGB(255, 202, 208, 214),
+          backgroundColor: const Color.fromRGBO(47, 47 , 47, 1),
           title: const Text(
             'Security Options',
-            style: TextStyle(color: Color.fromARGB(255, 28, 3, 34)),
+            style: TextStyle(color: Color.fromRGBO(247, 255, 247, 1)),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -109,102 +110,140 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2D2F36), // Match RoomsPage background
+      backgroundColor: const Color.fromRGBO(247, 255, 247, 1), // Match RoomsPage background - Mint
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          'Smart Home Dashboard',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          'HomeEase',
+          style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold, color: Color.fromRGBO(41, 41, 41, 1)),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(30.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             ElevatedButton.icon(
               onPressed: _showSecurityOptions,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromRGBO(41, 47, 54, 1),
+                backgroundColor: const Color.fromARGB(255, 47, 47, 47),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                textStyle: const TextStyle(fontSize: 16),
+                textStyle: const TextStyle(fontSize: 16, color: Color.fromRGBO(255, 255, 255, 1)),
               ),
-              icon: const Icon(Icons.security, color: Colors.white),
+              icon: const Icon(Icons.lock, color: Colors.white),
               label: const Text(
                 'Security',
                 style: TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(height: 16),
+
+
+          const SizedBox(height: 16), // Add spacing
+             // Rooms Grid
             Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
-                itemCount: _rooms.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == _rooms.length) {
-                    return GestureDetector(
-                      key: const Key('addRoomTile'),
-                      onTap: _addRoom,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.green[100],
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.green, width: 2),
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.green,
-                            size: 36,
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                  final room = _rooms[index];
+  child: Center(
+    child: SizedBox(
+      width: 1000, // Set a max width for the grid and its content
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // Align content to the left
+        children: [
+          // Heading "Rooms"
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0), // Adjust padding for alignment
+            child: Text(
+              'Rooms',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(41, 41, 41, 1),
+              ),
+            ),
+          ),
+
+          // Spacing between heading and grid
+          const SizedBox(height: 8),
+
+          // GridView for buttons
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Keep 2 columns
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 5, // Adjust aspect ratio as necessary
+              ),
+              itemCount: _rooms.length + 1,
+              itemBuilder: (context, index) {
+                if (index == _rooms.length) {
                   return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RoomsPage(room: room),
-                        ),
-                      );
-                    },
+                    key: const Key('addRoomTile'),
+                    onTap: _addRoom,
                     child: Container(
-                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: const Color.fromRGBO(41, 47, 54, 1),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.blue, width: 2),
+                        color: const Color.fromRGBO(78, 205, 196, 1),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.meeting_room,
-                              color: Colors.white, size: 36),
-                          const SizedBox(height: 8),
-                          Text(
-                            room.name,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ],
+                      child: const Center(
+                        child: Icon(
+                          Icons.add,
+                          color: Color.fromRGBO(247, 255, 247, 1),
+                          size: 28,
+                        ),
                       ),
                     ),
                   );
-                },
-              ),
+                }
+                final room = _rooms[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RoomsPage(room: room),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(41, 47, 54, 1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.meeting_room,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          room.name,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
+          ),
+        ],
+      ),
+    ),
+  ),
+),
+
+
           ],
         ),
       ),
